@@ -42,9 +42,6 @@ outputFile3.write(htmlwithtoc)
 outputFile3.close()
 
 # %%
-htmlwithtoc.toc
-
-# %%
 md = markdown.Markdown(extensions=['toc'])
 htmlwithtoc2 = md.convert(post['body'])
 htmlwithtoc2
@@ -60,5 +57,47 @@ with open('testoutput-toc.html','r+',encoding='utf-8',errors='xmlcharrefreplace'
     f.write(old)
     f.close()
 
+
+# %%
+post['frontmatter']
+
+# %%
+print(post['frontmatter'])
+
+# %%
+post['attributes']
+
+# %%
+post['attributes']['title']
+
+# %%
+from bs4 import BeautifulSoup
+html = open('testoutput-toc.html').read()
+soup = BeautifulSoup(html)
+definetitle = soup.new_tag('title')
+definetitle.string = post['attributes']['title']
+definetitle
+
+# %%
+soup.title
+
+# %%
+soup.title.replace_with(definetitle)
+
+# %%
+soup.title
+
+# %%
+from markdown.extensions.toc import TocExtension
+from markdown.extensions.tables import TableExtension
+# mdtable = markdown.Markdown(extensions=[TocExtension, TableExtension])
+mdwithtable = Frontmatter.read_file('../saturn-drmtest.github.io/posts/00projects/2020-01-22-urban-intensification.md')
+htmlwithtable = markdown.markdown(mdwithtable['body'], extensions=['toc', 'tables'])
+htmlwithtable
+
+# %%
+outputfilewithtable = open('htmlwithtabke.html','w',encoding='utf-8',errors='xmlcharrefreplace')
+outputfilewithtable.write(htmlwithtable)
+outputfilewithtable.close()
 
 # %%
