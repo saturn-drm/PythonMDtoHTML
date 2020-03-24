@@ -75,7 +75,7 @@ function myfunc() {
 
 ## image
 
-![testimage](../saturn-drmtest.github.io/assets/img/logo.png)
+![testimage](../saturn-drmtest.github.io/assets/img/Logo.png)
 
 ## toc
 
@@ -87,9 +87,23 @@ and then insert it respectively into #toc div
 
 need to generate table with extensions and edit later on the titles
 
+:empty | :empty
+---- | ----
+Category | Professional work of urban design
+Location | Tsinghua, Beijing, China
+Date of design | Feb 2017 - Apr 2017
+Tutor | Prof. Qi Xin
+Collaborator | Wen Qiulin, Lei Yuxin, Jiang Haomao and other 10 students
+Total GFA | 73,000 m²
+Site area | 27,000 m²
+Green rate | 34%
+Floor area ratio | 2.74
+
 ## direct html code
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=420 height=86 src="//music.163.com/outchain/player?type=3&id=2065011836&auto=0&height=66"></iframe>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=420 height=86 src="https://music.163.com/outchain/player?type=3&id=2065011836&auto=0&height=66"></iframe>
+
+<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/746912935&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
 
 ## hr lines
 
