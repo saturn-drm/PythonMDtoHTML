@@ -26,6 +26,7 @@
 # add class to <h> tag to avoid header overlapping the anchor
 # audit tables part in HTML with beautifulsoup
 # audit netease music <iframe> tag src attribute - add https: before exsisting src
+# audit netease music <iframe> tag width attribute - 100%
 # insert body html to post HTML <div id="content"> tag
 # insert toc html to post HTML <div id="toc"> tag
 # return templatepost.html
