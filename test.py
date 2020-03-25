@@ -21,7 +21,7 @@ of.write(bodyhtml)
 of.close()
 
 # %%
-md = markdown.Markdown(extensions=['toc'])
+md = markdown.Markdown(extensions=['toc', 'tables','fenced_code'])
 # need fenced_code here too
 
 # %%
@@ -32,7 +32,7 @@ bodytoc
 md.toc
 
 # %%
-with open(ofp,'r+',encoding='utf-8',errors='xmlcharrefreplace') as f:
+with open('test.html','r+',encoding='utf-8',errors='xmlcharrefreplace') as f:
     old = f.read()
     f.seek(0)
     f.write(md.toc)
