@@ -56,28 +56,24 @@
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </blockquote>
 <h2 id="code">code</h2>
-<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">markdown</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">markdown</span><span class="o">.</span><span class="n">markdown</span><span class="p">(</span><span class="n">markdownfile</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-</code></pre></div>
+<pre><code class="python">import markdown
+a = markdown.markdown(markdownfile)
+print(a)
+</code></pre>
 
+<pre><code class="HTML">&lt;div id=&quot;content&quot;&gt;&lt;/div&gt;
+</code></pre>
 
-<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;content&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</code></pre></div>
+<pre><code class="css">#content {
+margin: auto;
+padding: auto;
+}
+</code></pre>
 
-
-<div class="codehilite"><pre><span></span><code><span class="p">#</span><span class="nn">content</span> <span class="p">{</span>
-<span class="k">margin</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-<span class="k">padding</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<div class="codehilite"><pre><span></span><code><span class="kd">function</span> <span class="nx">myfunc</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-
+<pre><code class="javascript">function myfunc() {
+    document.getElementById(&quot;content&quot;).innerHTML = &quot;test&quot;
+}
+</code></pre>
 
 <h2 id="link">link</h2>
 <p><a href="https://www.zmei.moe">homepage</a></p>

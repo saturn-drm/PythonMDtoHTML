@@ -10,7 +10,8 @@ head_body = Frontmatter.read_file(fp)
 head_body['body']
 
 # %%
-bodyhtml = markdown.markdown(head_body['body'], extensions=['toc', 'tables','fenced_code', 'codehilite'])
+bodyhtml = markdown.markdown(head_body['body'], extensions=['toc', 'tables','fenced_code'])
+# bodyhtml = markdown.markdown(head_body['body'], extensions=['toc', 'tables','fenced_code', 'codehilite'])
 bodyhtml
 
 # %%
@@ -21,6 +22,7 @@ of.close()
 
 # %%
 md = markdown.Markdown(extensions=['toc'])
+# need fenced_code here too
 
 # %%
 bodytoc = md.convert(head_body['body'])

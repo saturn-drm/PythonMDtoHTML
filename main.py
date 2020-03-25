@@ -21,6 +21,9 @@
 
 # convert md file's body into html
 # pay attention to toc and tables and fenced_code ---and codehilite (no need)---
+# pay attention to image filepath
+# delete table head content
+# add class to <h> tag to avoid header overlapping the anchor
 # audit tables part in HTML with beautifulsoup
 # audit netease music <iframe> tag src attribute - add https: before exsisting src
 # insert body html to post HTML <div id="content"> tag
