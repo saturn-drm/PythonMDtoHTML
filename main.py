@@ -7,6 +7,8 @@
 # TO DO
 import os
 from frontmatter import Frontmatter
+import markdown
+from bs4 import BeautifulSoup
 
 # iterate all md files in the folder
 # return the list of file path
@@ -43,24 +45,19 @@ class analyzeYAML():
 
     def __init__(self, filePath):
         self.MDFilePath = filePath
-        self.MDINFOs = {}
-        self.headINFODict = {}
-        self.bodyINFOStr = ''
-
-    def decodeMD(self):
         self.MDINFOs = Frontmatter.read_file(self.MDFilePath)
-
-    def setHeadINFO(self):
         self.headINFODict = self.MDINFOs['attributes']
-
-    def setBodyINFO(self):
         self.bodyINFOStr = self.MDINFOs['body']
 
-    def getHeadINFODict(self):
-        return self.headINFODict
+# get the soup ready for writing and inserting
+# return soup
+# TO DO
+class analyzeSoup():
 
-    def getBodyINFOStr(self):
-        return self.bodyINFOStr
+    def __init__(self, fp):
+        self.fp = fp
+        self.html = open(self.fp).read()
+        self.soup = BeautifulSoup(self.html)
 
 # insert the title to post HTML <title> tag with beautifulsoup
 # return templatepost.html

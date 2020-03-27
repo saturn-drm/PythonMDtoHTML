@@ -89,17 +89,17 @@ class analyzeYAML():
 
     def __init__(self, fileName):
         self.MDFileName = fileName
-        self.MDINFOs = {}
-        self.headINFODict = {}
-        self.bodyINFOStr = ''
+        # self.MDINFOs = {}
+        # self.headINFODict = {}
+        # self.bodyINFOStr = ''
 
-    def decodeMD(self):
+    # def decodeMD(self):
         self.MDINFOs = Frontmatter.read_file(self.MDFileName)
 
-    def setHeadINFO(self):
+    # def setHeadINFO(self):
         self.headINFODict = self.MDINFOs['attributes']
 
-    def setBodyINFO(self):
+    # def setBodyINFO(self):
         self.bodyINFOStr = self.MDINFOs['body']
 
     def getHeadINFODict(self):
@@ -110,9 +110,29 @@ class analyzeYAML():
     
 fp = 'testtemplate.md'
 decodeMD = analyzeYAML(fp)
-decodeMD.decodeMD()
-decodeMD.setHeadINFO()
-decodeMD.setBodyINFO()
-decodeMD.getBodyINFOStr()
+# decodeMD.decodeMD()
+# decodeMD.setHeadINFO()
+# decodeMD.setBodyINFO()
+decodeMD.headINFODict
 
+# %%
+from bs4 import BeautifulSoup
+html = open('archive/testoutput-toc.html').read()
+soup = BeautifulSoup(html)
+type(html)
+
+# %%
+type(soup)
+
+# %%
+class analyzeSoup():
+
+    def __init__(self, fp):
+        self.fp = fp
+        self.html = open(self.fp).read()
+        self.soup = BeautifulSoup(self.html)
+
+testfp = 'archive/testoutput-toc.html'
+testAnalyzedSoup = analyzeSoup(testfp)
+testAnalyzedSoup.soup
 # %%

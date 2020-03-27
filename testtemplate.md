@@ -2,6 +2,7 @@
 title: style test
 modify date: 2020-03-24
 tags: [Python, HTML]
+head image: ../saturn-drmtest.github.io/assets/img/covers/codingcover.jpg
 ---
 
 # head1
