@@ -10,7 +10,6 @@ from frontmatter import Frontmatter
 
 # iterate all md files in the folder
 # return the list of file path
-# TO DO
 class filepaths():
 
     def __init__(self, orifp):
@@ -40,7 +39,6 @@ class filepaths():
 # for each file, deal with the YAML frontmatter and body
 # return a dictionary of YAML - title, modify time, head image
 # return a string of body
-# TO DO
 class analyzeYAML():
 
     def __init__(self, filePath):
