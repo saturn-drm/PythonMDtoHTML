@@ -5,15 +5,64 @@
 
 # set up the environment
 # TO DO
+import os
+from frontmatter import Frontmatter
 
 # iterate all md files in the folder
 # return the list of file path
 # TO DO
+class filepaths():
+
+    def __init__(self, orifp):
+        self.path = orifp
+        self.fileList = []
+        self.validFileList = []
+
+    def getFiles(self):
+        for root, subFolders, files in os.walk(self.path):
+            for fileName in files:
+                self.fileList.append(os.path.join(root, fileName))
+
+    def validFiles(self):
+        for fileName in self.fileList:
+            clearFileName = os.path.basename(fileName)
+            if clearFileName == '.DS_Store':
+                pass
+            else:
+                self.validFileList.append(fileName)
+
+    def getFilePaths(self):
+        return self.fileList
+
+    def getValidFileNames(self):
+        return self.validFileList
 
 # for each file, deal with the YAML frontmatter and body
-# return a dictionary of YAML
+# return a dictionary of YAML - title, modify time, head image
 # return a string of body
 # TO DO
+class analyzeYAML():
+
+    def __init__(self, filePath):
+        self.MDFilePath = filePath
+        self.MDINFOs = {}
+        self.headINFODict = {}
+        self.bodyINFOStr = ''
+
+    def decodeMD(self):
+        self.MDINFOs = Frontmatter.read_file(self.MDFilePath)
+
+    def setHeadINFO(self):
+        self.headINFODict = self.MDINFOs['attributes']
+
+    def setBodyINFO(self):
+        self.bodyINFOStr = self.MDINFOs['body']
+
+    def getHeadINFODict(self):
+        return self.headINFODict
+
+    def getBodyINFOStr(self):
+        return self.bodyINFOStr
 
 # insert the title to post HTML <title> tag with beautifulsoup
 # return templatepost.html
