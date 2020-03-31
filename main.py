@@ -49,6 +49,18 @@ class analyzeYAML():
         self.headINFODict = self.MDINFOs['attributes']
         self.bodyINFOStr = self.MDINFOs['body']
 
+    def getTitleStr(self):
+        return self.headINFODict['title']
+    
+    def getModifyDateStr(self):
+        return self.headINFODict['modify date']
+
+    def getTagsList(self):
+        return self.headINFODict['tags']
+    
+    def getHeadIMGStr(self):
+        return self.headINFODict['head image']
+
 # get the soup ready for writing and inserting
 # return soup
 # TO DO
@@ -63,18 +75,26 @@ class analyzeSoup():
 # return templatepost.html
 # TO DO
 
-# convert md file's body into html
-# pay attention to toc and tables and fenced_code ---and codehilite (no need)---
-# pay attention to image filepath
+# ------ pay attention to image filepath ------
 # delete table head content
 # add class to <h> tag to avoid header overlapping the anchor
 # audit tables part in HTML with beautifulsoup
 # audit netease music <iframe> tag src attribute - add https: before exsisting src
-# audit netease music <iframe> tag width attribute - 100%
 # insert body html to post HTML <div id="content"> tag
 # insert toc html to post HTML <div id="toc"> tag
 # return templatepost.html
 # TO DO
+class convertMDPost():
+
+    def __init__(self, mdstr):
+        self.mdstr = mdstr
+
+# convert md file's body into html
+# pay attention to toc and tables and fenced_code ---and codehilite (no need)---
+    def convertALL(self, extensions=['toc', 'tables','fenced_code']):
+        MDMethod = markdown.Markdown(extensions=extensions)
+        self.bodyHTML = MDMethod.convert(self.mdstr)
+        self.bodyTOC = MDMethod.toc
 
 # insert title and modify date info to articles.HTML
 # replace the href in articles.HTML
