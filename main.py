@@ -4,11 +4,11 @@
 # OUTPUT - HTML files converted from each md file
 
 # set up the environment
-# TO DO
 import os
 from frontmatter import Frontmatter
 import markdown
 from bs4 import BeautifulSoup
+import re
 
 # iterate all md files in the folder
 # return the list of file path
@@ -66,20 +66,36 @@ class analyzeYAML():
 # TO DO
 class analyzeSoup():
 
-    def __init__(self, fp):
-        self.fp = fp
-        self.html = open(self.fp).read()
-        self.soup = BeautifulSoup(self.html)
+    def __init__(self, obj, analyzeMode='fp'):
+        if analyzeMode == 'fp':
+            self.obj = obj
+            self.html = open(self.obj).read()
+            self.soup = BeautifulSoup(self.html, "html.parser")
+        if analyzeMode == 'html':
+            self.obj = obj
+            self.soup = BeautifulSoup(self.obj, "html.parser")
 
 # insert the title to post HTML <title> tag with beautifulsoup
-# return templatepost.html
-# TO DO
+    def modifyTitle(self, newTitle):
+        self.soup.title.string = newTitle
+
+# add class to <h> tag to avoid header overlapping the anchor
+    def modifyHTagAnchor(self):
+        self.headList = self.soup.findAll(re.compile('^h'))
+        for tag in self.headList:
+            if tag.has_attr('class') and 'anchor' not in tag['class']:
+                tag['class'].append('anchor')
+            elif tag.has_attr('class') and 'anchor' in tag['class']:
+                pass
+            else:
+                tag['class'] = 'anchor'
 
 # ------ pay attention to image filepath ------
 # delete table head content
-# add class to <h> tag to avoid header overlapping the anchor
 # audit tables part in HTML with beautifulsoup
+
 # audit netease music <iframe> tag src attribute - add https: before exsisting src
+
 # insert body html to post HTML <div id="content"> tag
 # insert toc html to post HTML <div id="toc"> tag
 # return templatepost.html
