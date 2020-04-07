@@ -78,6 +78,7 @@ class analyzeSoup():
     def modifyTitle(self, newTitle):
         self.soup.title.string = newTitle
 
+# add class to <h> tag to avoid header overlapping the anchor
     def modifyHTagAnchor(self):
         self.headList = self.soup.findAll(re.compile('^h'))
         for tag in self.headList:
@@ -88,9 +89,67 @@ class analyzeSoup():
             else:
                 tag['class'] = 'anchor'
 
+    def modifyTableHead(self):
+        self.tableHeadList = self.soup.findAll("th")
+        for tableHead in self.tableHeadList:
+            tableHead.string = ''
+
 souptestaddclass = analyzeSoup(htmltesttest, analyzeMode='html')
 souptestaddclass2 = analyzeSoup(htmltesttest2, analyzeMode='html')
 souptestaddclass.modifyHTagAnchor()
 souptestaddclass.headList
+
+# %%
+tableheadhtml = '''
+<table>
+<thead>
+<tr>
+<th>:empty</th>
+<th>:empty</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Category</td>
+<td>Professional work of urban design</td>
+</tr>
+<tr>
+<td>Location</td>
+<td>Tsinghua, Beijing, China</td>
+</tr>
+<tr>
+<td>Date of design</td>
+<td>Feb 2017 - Apr 2017</td>
+</tr>
+<tr>
+<td>Tutor</td>
+<td>Prof. Qi Xin</td>
+</tr>
+<tr>
+<td>Collaborator</td>
+<td>Wen Qiulin, Lei Yuxin, Jiang Haomao and other 10 students</td>
+</tr>
+<tr>
+<td>Total GFA</td>
+<td>73,000 m²</td>
+</tr>
+<tr>
+<td>Site area</td>
+<td>27,000 m²</td>
+</tr>
+<tr>
+<td>Green rate</td>
+<td>34%</td>
+</tr>
+<tr>
+<td>Floor area ratio</td>
+<td>2.74</td>
+</tr>
+</tbody>
+</table>
+'''
+tableheadclass = analyzeSoup(tableheadhtml, analyzeMode='html')
+tableheadclass.modifyTableHead()
+tableheadclass.soup
 
 # %%

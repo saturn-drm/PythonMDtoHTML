@@ -90,9 +90,14 @@ class analyzeSoup():
             else:
                 tag['class'] = 'anchor'
 
-# ------ pay attention to image filepath ------
 # delete table head content
 # audit tables part in HTML with beautifulsoup
+    def modifyTableHead(self):
+        self.tableHeadList = self.soup.findAll("th")
+        for tableHead in self.tableHeadList:
+            tableHead.string = ''
+
+# ------ pay attention to image filepath ------
 
 # audit netease music <iframe> tag src attribute - add https: before exsisting src
 
