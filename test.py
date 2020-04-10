@@ -54,102 +54,110 @@ soup.title.string = 'new title'
 soup.title
 
 # %%
-import re
-htmltesttest = '''
-<h1 class="anchor" id="head1">head1</h1>
-<h2 id="subhead1">subhead1</h2>
-<h3 id="subsubhead1">subsubhead1</h3>
-<h1 id="todo">todo</h1>
-'''
-htmltesttest2 = '<h2 id="subhead1">subhead1</h2>'
-
-class analyzeSoup():
-
-    def __init__(self, obj, analyzeMode='fp'):
-        if analyzeMode == 'fp':
-            self.obj = obj
-            self.html = open(self.obj).read()
-            self.soup = BeautifulSoup(self.html, "html.parser")
-        if analyzeMode == 'html':
-            self.obj = obj
-            self.soup = BeautifulSoup(self.obj, "html.parser")
-
-# insert the title to post HTML <title> tag with beautifulsoup
-    def modifyTitle(self, newTitle):
-        self.soup.title.string = newTitle
-
-# add class to <h> tag to avoid header overlapping the anchor
-    def modifyHTagAnchor(self):
-        self.headList = self.soup.findAll(re.compile('^h'))
-        for tag in self.headList:
-            if tag.has_attr('class') and 'anchor' not in tag['class']:
-                tag['class'].append('anchor')
-            elif tag.has_attr('class') and 'anchor' in tag['class']:
-                pass
-            else:
-                tag['class'] = 'anchor'
-
-    def modifyTableHead(self):
-        self.tableHeadList = self.soup.findAll("th")
-        for tableHead in self.tableHeadList:
-            tableHead.string = ''
-
-souptestaddclass = analyzeSoup(htmltesttest, analyzeMode='html')
-souptestaddclass2 = analyzeSoup(htmltesttest2, analyzeMode='html')
-souptestaddclass.modifyHTagAnchor()
-souptestaddclass.headList
+soup = BeautifulSoup('<div id="content"></div>', "html.parser")
+targetdiv = soup.find(id='content')
+targetdiv.insert(0, tempcontent[1])
+targetdiv
 
 # %%
-tableheadhtml = '''
-<table>
-<thead>
-<tr>
-<th>:empty</th>
-<th>:empty</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Category</td>
-<td>Professional work of urban design</td>
-</tr>
-<tr>
-<td>Location</td>
-<td>Tsinghua, Beijing, China</td>
-</tr>
-<tr>
-<td>Date of design</td>
-<td>Feb 2017 - Apr 2017</td>
-</tr>
-<tr>
-<td>Tutor</td>
-<td>Prof. Qi Xin</td>
-</tr>
-<tr>
-<td>Collaborator</td>
-<td>Wen Qiulin, Lei Yuxin, Jiang Haomao and other 10 students</td>
-</tr>
-<tr>
-<td>Total GFA</td>
-<td>73,000 m²</td>
-</tr>
-<tr>
-<td>Site area</td>
-<td>27,000 m²</td>
-</tr>
-<tr>
-<td>Green rate</td>
-<td>34%</td>
-</tr>
-<tr>
-<td>Floor area ratio</td>
-<td>2.74</td>
-</tr>
-</tbody>
-</table>
+html = '''
+<div id="offsetheader">
+        <img src="/assets/img/covers/codingcover.jpg"/>
+    </div>
+    '''
+headImgSrc = '/assests/img/covers/architecturecover.jpg'
+soup = BeautifulSoup(html, "html.parser")
+targetDiv = soup.find(id='offsetheader')
+targetDiv.img['src'] = headImgSrc
+targetDiv
+
+# %%
+import os
+class filepaths():
+
+    def __init__(self, orifp, desfolder):
+        self.path = orifp
+        self.fileList = []
+        self.validFileList = []
+        self.desFileDict = {}
+        self.desfolder = desfolder
+
+    def getFiles(self):
+        for root, subFolders, files in os.walk(self.path):
+            for fileName in files:
+                self.fileList.append(os.path.join(root, fileName))
+
+    def validFiles(self):
+        for fileName in self.fileList:
+            clearFileName = os.path.basename(fileName)
+            subfolderFileName = '/'.join(fileName.split('/')[3:])
+            htmlBaseName = os.path.splitext(subfolderFileName)[0] + '.html'
+            if clearFileName == '.DS_Store':
+                pass
+            elif os.path.exists(os.path.join(self.desfolder, htmlBaseName)):
+                pass
+            else:
+                self.validFileList.append(fileName)
+                self.desFileDict[fileName] = os.path.join(self.desfolder, htmlBaseName)
+
+    def getFilePaths(self):
+        return self.fileList
+
+    def getValidFileNames(self):
+        return self.validFileList
+
+filepathclass = filepaths('../saturn-drmtest.github.io/posts', '../saturn-drmtest.github.io/postshtml')
+filepathclass.getFiles()
+filepathclass.validFiles()
+# filepathclass.validFileList
+dic = filepathclass.desFileDict
+
+# %%
+clearFileName = os.path.basename('../saturn-drmtest.github.io/posts/01blog/01digest/2020-01-26-资治通鉴.md')
+clearFileName
+
+# %%
+subfolderFileName = '/'.join('../saturn-drmtest.github.io/posts/01blog/01digest/2020-01-26-资治通鉴.md'.split('/')[3:])
+subfolderFileName
+
+# %%
+htmlBaseName = os.path.splitext(clearFileName)[0] + '.html'
+htmlBaseName
+
+# %%
+os.path.exists(os.path.join('../saturn-drmtest.github.io/postshtml', htmlBaseName))
+
+# %%
+print('Converting %s' % os.path.basename('../saturn-drmtest.github.io/posts/01blog/01digest/2020-01-26-资治通鉴.md'))
+
+# %%
+def insertDiv(modifiedSoup, id=''):
+    targetDiv = soup.find(id=id)
+    targetDiv.clear()
+    targetDiv.insert(0, modifiedSoup)
+htmltxt = '''
+<h1 class="anchor" id="head1">head1</h1>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit
+                anim id est laborum.</p>
+<h2 id="subhead1">subhead1</h2>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore
+                magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit
+                anim id est laborum.</p>
 '''
-tableheadclass = analyzeSoup(tableheadhtml, analyzeMode='html')
-tableheadclass.modifyTableHead()
-tableheadclass.soup
+htmlfp = '../saturn-drmtest.github.io/layout/article.html'
+soup = BeautifulSoup(open(htmlfp).read(), "html.parser")
+insertDiv(BeautifulSoup(htmltxt, 'html.parser'), id='content')
+soup
 
 # %%

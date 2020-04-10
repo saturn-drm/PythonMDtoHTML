@@ -14,10 +14,12 @@ import re
 # return the list of file path
 class filepaths():
 
-    def __init__(self, orifp):
+    def __init__(self, orifp, desfolder):
         self.path = orifp
         self.fileList = []
         self.validFileList = []
+        self.desFileDict = {}
+        self.desfolder = desfolder
 
     def getFiles(self):
         for root, subFolders, files in os.walk(self.path):
@@ -27,16 +29,24 @@ class filepaths():
     def validFiles(self):
         for fileName in self.fileList:
             clearFileName = os.path.basename(fileName)
+            subfolderFileName = '/'.join(fileName.split('/')[3:])
+            htmlBaseName = os.path.splitext(subfolderFileName)[0] + '.html'
             if clearFileName == '.DS_Store':
+                pass
+            elif os.path.exists(os.path.join(self.desfolder, htmlBaseName)):
                 pass
             else:
                 self.validFileList.append(fileName)
+                self.desFileDict[fileName] = os.path.join(self.desfolder, htmlBaseName)
 
     def getFilePaths(self):
         return self.fileList
 
     def getValidFileNames(self):
         return self.validFileList
+
+    def getDesFileDict(self):
+        return self.desFileDict
 
 # for each file, deal with the YAML frontmatter and body
 # return a dictionary of YAML - title, modify time, head image
@@ -63,7 +73,6 @@ class analyzeYAML():
 
 # get the soup ready for writing and inserting
 # return soup
-# TO DO
 class analyzeSoup():
 
     def __init__(self, obj, analyzeMode='fp'):
@@ -75,10 +84,6 @@ class analyzeSoup():
             self.obj = obj
             self.soup = BeautifulSoup(self.obj, "html.parser")
 
-# insert the title to post HTML <title> tag with beautifulsoup
-    def modifyTitle(self, newTitle):
-        self.soup.title.string = newTitle
-
 # add class to <h> tag to avoid header overlapping the anchor
     def modifyHTagAnchor(self):
         self.headList = self.soup.findAll(re.compile('^h'))
@@ -89,6 +94,14 @@ class analyzeSoup():
                 pass
             else:
                 tag['class'] = 'anchor'
+    
+# pay attention to image filepath
+    def modifyIMGPath(self):
+        self.IMGList = self.soup.select('#post img')
+        for IMGTag in self.IMGList:
+            orisrc = IMGTag['src']
+            pathList = orisrc.split('/')
+            IMGTag['src'] = '/'.join(pathList[pathList.index('assets'):])
 
 # delete table head content
 # audit tables part in HTML with beautifulsoup
@@ -96,13 +109,31 @@ class analyzeSoup():
         self.tableHeadList = self.soup.findAll("th")
         for tableHead in self.tableHeadList:
             tableHead.string = ''
-
-# ------ pay attention to image filepath ------
-
-# audit netease music <iframe> tag src attribute - add https: before exsisting src
-
+    
 # insert body html to post HTML <div id="content"> tag
 # insert toc html to post HTML <div id="toc"> tag
+    def insertDiv(self, modifiedSoup, id=''):
+        targetDiv = self.soup.find(id=id)
+        targetDiv.clear()
+        if id == 'toc':
+            targetDiv.insert(0, BeautifulSoup(modifiedSoup, 'html.parser'))
+        else:
+            targetDiv.insert(0, modifiedSoup)
+
+# edit head picture
+    def modifyHeadImg(self, headImgSrc):
+        if headImgSrc == '':
+            pass
+        else:
+            targetDiv = self.soup.find(id='offsetheader')
+            targetDiv.img['src'] = headImgSrc
+
+# insert the title to post HTML <title> tag with beautifulsoup
+    def modifyTitle(self, newTitle):
+        self.soup.title.string = newTitle
+
+# ------ audit netease music <iframe> tag src attribute - add https: before exsisting src ------
+
 # return templatepost.html
 # TO DO
 class convertMDPost():
@@ -121,3 +152,74 @@ class convertMDPost():
 # replace the href in articles.HTML
 # return articles(blog).html
 # TO DO
+
+### HERE WE GO! ###
+if __name__ == '__main__':
+    # set up the src and des folders
+    orifp = '../saturn-drmtest.github.io/posts'
+    desfp = '../saturn-drmtest.github.io/postshtml'
+    templatefp = '../saturn-drmtest.github.io/layout/article.html'
+    print('Step 1 completed: Set up the file paths.')
+
+    # get the files need to be converted and the output file location respectively
+    filePathInstance = filepaths(orifp, desfp)
+    filePathInstance.getFiles()
+    filePathInstance.validFiles()
+    postsTOConvertList = filePathInstance.validFileList
+    htmlDesDic = filePathInstance.desFileDict
+    print('Step 2 completed: Fetch MD need converting LIST, and corresponding destination path DICTIONARY.')
+
+    # soup the template html file
+    templateHTMLInstance = analyzeSoup(templatefp, analyzeMode='fp')
+    templateSOUP = templateHTMLInstance.soup
+    print('Step 3 completed: Read template hmtl file with SOUP.')
+
+    # work with single MD post
+        # analyze YAML
+    for mdFilePath in postsTOConvertList:
+        print('Converting %s...' % os.path.basename(mdFilePath))
+        desFilePath = htmlDesDic[mdFilePath]
+        MDYAMLClass = analyzeYAML(mdFilePath)
+        MDBodyStr = MDYAMLClass.bodyINFOStr
+        htmlTitle = MDYAMLClass.getTitleStr()
+        htmlDate = MDYAMLClass.getModifyDateStr()
+        htmlTags = MDYAMLClass.getTagsList()
+        htmlHeadImg = MDYAMLClass.getHeadIMGStr()
+        print('%s YAML analysis completed' % os.path.basename(mdFilePath))
+
+        # convert to hmtl
+        MDToHTMLClass = convertMDPost(MDBodyStr)
+        MDToHTMLClass.convertALL(extensions=['toc', 'tables','fenced_code'])
+        bodyHTML = MDToHTMLClass.bodyHTML
+        bodyTOC = MDToHTMLClass.bodyTOC
+        print('Markdown file %s converted to HTML with TOC' % os.path.basename(mdFilePath))
+
+        # Modify soup and html
+        # soup the converted html txt
+        convertingHTMLInstance = analyzeSoup(bodyHTML, analyzeMode='html')
+        convertingSOUP = convertingHTMLInstance.soup
+        # <h> add class anchor
+        convertingHTMLInstance.modifyHTagAnchor()
+        # tables
+        convertingHTMLInstance.modifyTableHead()
+        # IMG
+        convertingHTMLInstance.modifyIMGPath()
+        print('Modified %s SOUP.' % os.path.basename(mdFilePath))
+
+        # insert content
+        templateHTMLInstance.insertDiv(convertingSOUP, id='post')
+        # insert toc
+        templateHTMLInstance.insertDiv(bodyTOC, id='toc')
+        # head img
+        templateHTMLInstance.modifyHeadImg(htmlHeadImg)
+        # title
+        templateHTMLInstance.modifyTitle(htmlTitle)
+        print('Inserted %s into layout.html.' % os.path.basename(mdFilePath))
+
+        # write to file
+        htmlFile = open(desFilePath, 'w', encoding='utf-8', errors='xmlcharrefreplace')
+        htmlFile.write(str(templateSOUP))
+        htmlFile.close()
+        print('%s convert finished.' % os.path.basename(mdFilePath))
+    
+    print('Mission completed.')
