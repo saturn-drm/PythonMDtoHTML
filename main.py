@@ -163,9 +163,9 @@ class convertMDPost():
 ### HERE WE GO! ###
 if __name__ == '__main__':
     # set up the src and des folders
-    orifp = '../saturn-drmtest.github.io/posts'
-    desfp = '../saturn-drmtest.github.io/postshtml'
-    templatefp = '../saturn-drmtest.github.io/layout/article.html'
+    orifp = '../saturn-drm.github.io/posts'
+    desfp = '../saturn-drm.github.io/postshtml'
+    templatefp = '../saturn-drm.github.io/layout/article.html'
     print('Step 1 completed: Set up the file paths.')
 
     # get the files need to be converted and the output file location respectively
