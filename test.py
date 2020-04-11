@@ -161,3 +161,24 @@ insertDiv(BeautifulSoup(htmltxt, 'html.parser'), id='content')
 soup
 
 # %%
+from bs4 import BeautifulSoup
+soup = BeautifulSoup("<b>stop</b>")
+tag = soup.new_tag('h1')
+tag.string = "Don't"
+soup.find('b').string.insert_before(tag)
+soup.b
+
+# %%
+html = '''
+<div id="content">
+<div id="post"><h1>title</h1></div>
+</div>
+'''
+soup = BeautifulSoup(html, 'html.parser')
+tag = soup.new_tag('h1')
+tag.string = 'title2'
+targettag = soup.find(id='post')
+targettag.insert(0, tag)
+soup
+
+# %%

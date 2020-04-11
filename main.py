@@ -86,7 +86,7 @@ class analyzeSoup():
 
 # add class to <h> tag to avoid header overlapping the anchor
     def modifyHTagAnchor(self):
-        self.headList = self.soup.findAll(re.compile('^h'))
+        self.headList = self.soup.findAll(re.compile('^h\d'))
         for tag in self.headList:
             if tag.has_attr('class') and 'anchor' not in tag['class']:
                 tag['class'].append('anchor')
@@ -119,6 +119,13 @@ class analyzeSoup():
             targetDiv.insert(0, BeautifulSoup(modifiedSoup, 'html.parser'))
         else:
             targetDiv.insert(0, modifiedSoup)
+
+# insert article title
+    def insertTitleInArticle(self, titletxt):
+        titletag = self.soup.new_tag('h1', style="color: #fd746c;")
+        titletag.string = titletxt
+        addingTag = self.soup.find(id='post')
+        addingTag.insert(0, titletag)
 
 # edit head picture
     def modifyHeadImg(self, headImgSrc):
@@ -210,6 +217,8 @@ if __name__ == '__main__':
         templateHTMLInstance.insertDiv(convertingSOUP, id='post')
         # insert toc
         templateHTMLInstance.insertDiv(bodyTOC, id='toc')
+        # add article title
+        templateHTMLInstance.insertTitleInArticle(htmlTitle)
         # head img
         templateHTMLInstance.modifyHeadImg(htmlHeadImg)
         # title
