@@ -33,8 +33,8 @@ class filepaths():
             htmlBaseName = os.path.splitext(subfolderFileName)[0] + '.html'
             if clearFileName == '.DS_Store':
                 pass
-            elif os.path.exists(os.path.join(self.desfolder, htmlBaseName)):
-                pass
+            # elif os.path.exists(os.path.join(self.desfolder, htmlBaseName)):
+            #     pass
             else:
                 self.validFileList.append(fileName)
                 self.desFileDict[fileName] = os.path.join(self.desfolder, htmlBaseName)
